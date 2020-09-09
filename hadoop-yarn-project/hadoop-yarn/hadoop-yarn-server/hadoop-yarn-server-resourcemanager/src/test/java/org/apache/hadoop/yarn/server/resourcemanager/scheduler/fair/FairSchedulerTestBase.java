@@ -182,7 +182,7 @@ public class FairSchedulerTestBase {
     ApplicationPlacementContext placementCtx =
         new ApplicationPlacementContext(queueId);
     scheduler.addApplication(id.getApplicationId(), queueId, userId, false,
-        placementCtx);
+        placementCtx, Priority.newInstance(1));
     // This conditional is for testAclSubmitApplication where app is rejected
     // and no app is added.
     if (scheduler.getSchedulerApplications()
@@ -221,7 +221,7 @@ public class FairSchedulerTestBase {
     ApplicationPlacementContext placementCtx =
         new ApplicationPlacementContext(queueId);
     scheduler.addApplication(id.getApplicationId(), queueId, userId, false,
-        placementCtx);
+        placementCtx, Priority.newInstance(1));
     // This conditional is for testAclSubmitApplication where app is rejected
     // and no app is added.
     if (scheduler.getSchedulerApplications().containsKey(
@@ -290,7 +290,7 @@ public class FairSchedulerTestBase {
     ApplicationPlacementContext placementCtx =
         new ApplicationPlacementContext(queueId);
     scheduler.addApplication(id.getApplicationId(), queueId, userId, true,
-        placementCtx);
+        placementCtx, Priority.newInstance(1));
     return id;
   }
 

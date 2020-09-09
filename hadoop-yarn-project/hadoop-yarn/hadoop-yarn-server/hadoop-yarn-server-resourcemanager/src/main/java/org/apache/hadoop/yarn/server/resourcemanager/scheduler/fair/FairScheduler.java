@@ -466,7 +466,7 @@ public class FairScheduler extends
    */
   protected void addApplication(ApplicationId applicationId,
       String queueName, String user, boolean isAppRecovering,
-      ApplicationPlacementContext placementContext) {
+      ApplicationPlacementContext placementContext, Priority appPriority) {
     // If the  placement was rejected the placementContext will be null.
     // We ignore placement rules on recovery.
     if (!isAppRecovering && placementContext == null) {
@@ -554,7 +554,7 @@ public class FairScheduler extends
       }
 
       SchedulerApplication<FSAppAttempt> application =
-          new SchedulerApplication<>(queue, user);
+          new SchedulerApplication<>(queue, user, appPriority);
       applications.put(applicationId, application);
       queue.getMetrics().submitApp(user);
 
@@ -595,7 +595,8 @@ public class FairScheduler extends
       FSLeafQueue queue = (FSLeafQueue) application.getQueue();
 
       FSAppAttempt attempt = new FSAppAttempt(this, applicationAttemptId, user,
-          queue, new ActiveUsersManager(getRootQueueMetrics()), rmContext);
+          queue, new ActiveUsersManager(getRootQueueMetrics()), rmContext,
+          application.getPriority());
       if (transferStateFromPreviousAttempt) {
         attempt.transferStateFromPreviousAttempt(
             application.getCurrentAppAttempt());
@@ -1247,7 +1248,9 @@ public class FairScheduler extends
         addApplication(appAddedEvent.getApplicationId(),
             queueName, appAddedEvent.getUser(),
             appAddedEvent.getIsAppRecovering(),
-            appAddedEvent.getPlacementContext());
+            appAddedEvent.getPlacementContext(),
+            appAddedEvent.getApplicatonPriority()
+        );
       }
       break;
     case APP_REMOVED:
